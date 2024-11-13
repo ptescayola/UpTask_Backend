@@ -4,12 +4,24 @@
       "rootDir": "./src",
       "lib": ["esnext"],
       "target": "ESNext",
-      "moduleResolution": "Node",
-      "module": "CommonJS",
+      "moduleResolution": "Bundler",
+      "module": "es2015",
       "strict": false,
       "sourceMap": true,
       "esModuleInterop": true,
-      "declaration": true
+      "declaration": true,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "baseUrl": ".",
+      "paths": { "*" : ["./src/*"] }
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "tsc-alias": {
+      "verbose": false,
+      "resolveFullPaths": true,
+      "fileExtensions": {
+      "inputGlob": "{js,jsx,mjs}",
+      "outputCheck": ["js", "json", "jsx", "mjs"]
+      }
+  }
 }
