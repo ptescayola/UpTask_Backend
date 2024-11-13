@@ -9,7 +9,9 @@
     "strict": false,
     "sourceMap": true,
     "esModuleInterop": true,
-    "declaration": true
+    "declaration": true,
+    "skipLibCheck": true,
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }
