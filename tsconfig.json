@@ -13,7 +13,8 @@
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
       "baseUrl": ".",
-      "paths": { "*" : ["./src/*"] }
+      "paths": { "*" : ["./src/*"] },
+      "skipLibCheck": true
   },
   "include": ["src/**/*.ts"],
   "tsc-alias": {
