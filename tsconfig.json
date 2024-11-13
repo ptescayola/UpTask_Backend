@@ -1,16 +1,15 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "lib": ["esnext"],
-    "target": "ESNext",
-    "moduleResolution": "Bundler",
-    "module": "es2015",
-    "strict": false,
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "declaration": true,
-    "skipLibCheck": true
+      "outDir": "./dist",
+      "rootDir": "./src",
+      "lib": ["esnext"],
+      "target": "ESNext",
+      "moduleResolution": "Node",
+      "module": "CommonJS",
+      "strict": false,
+      "sourceMap": true,
+      "esModuleInterop": true,
+      "declaration": true
   },
   "include": ["src/**/*.ts"]
 }
