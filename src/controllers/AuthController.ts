@@ -39,7 +39,7 @@ export class AuthController {
       })
 
       await Promise.allSettled([user.save(), token.save()])
-      res.status(200)
+      res.status(200).send()
     } catch (error) {
       res.status(500).json({ error: 'something_went_wrong' })
     }
@@ -254,5 +254,6 @@ export class AuthController {
       const error = new Error('password.wrong')
       return res.status(401).json({error: error.message})
     }
+    return res.status(200).send()
   }
 }
