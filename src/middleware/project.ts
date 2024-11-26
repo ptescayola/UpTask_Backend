@@ -14,12 +14,12 @@ export async function projectExists( req: Request, res: Response, next: NextFunc
     const { projectId } = req.params
     const project = await Project.findById(projectId)
     if (!project) {
-      const error = new Error('Project not found!')
+      const error = new Error('project.not_found')
       return res.status(404).json({error: error.message})
     }
     req.project = project
     next()
   } catch (error) {
-    res.status(500).json({error: 'Error'})
+    res.status(500).json({ error: 'something_went_wrong' })
   }
 }

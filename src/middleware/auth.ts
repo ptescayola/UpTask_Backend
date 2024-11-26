@@ -13,7 +13,7 @@ declare global {
 export const authenticate: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
   const bearer = req.headers.authorization
   if (!bearer) {
-    const error = new Error('Not Authorized')
+    const error = new Error('auth.not_authorized')
     res.status(401).json({error: error.message})
     return
   }
@@ -24,15 +24,16 @@ export const authenticate: RequestHandler = async (req: Request, res: Response, 
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     
     if (typeof decoded === 'object' && decoded.id) {
-      const user = await User.findById(decoded.id).select('_id name email')
+      const user = await User.findById(decoded.id).select('_id name lastname email')
+      console.log(user)
       if (user) {
         req.user = user // to have available what user is doing request (manager)
         next()
       } else {
-        res.status(500).json({error: 'Token not valid'})
+        res.status(500).json({error: 'token.invalid'})
       }
     }
   } catch (error) {
-    res.status(500).json({error: 'Token not valid'})
+    res.status(500).json({error: 'token.invalid'})
   }
 }

@@ -9,9 +9,9 @@ export class ProjectController {
   
     try {
       await project.save()
-      res.send('NEW Project Created!')
+      res.send('project.created')
     } catch(error) {
-      console.log(error)
+      res.status(500).json({ error: 'something_went_wrong' })
     }
   }
 
@@ -25,7 +25,7 @@ export class ProjectController {
       })
       res.json(projects)
     } catch (error) {
-      console.log(error)
+      res.status(500).json({ error: 'something_went_wrong' })
     }
   }
 
@@ -33,39 +33,36 @@ export class ProjectController {
     const { id } = req.params
     try {
       const project = await Project.findById(id).populate('tasks')
-      if (!project) {
-        const error = new Error('Project not found')
-        return res.status(404).json({error: error.message})
-      }
-      if (project.manager.toString() !== req.user.id.toString() && !project.team.includes(req.user.id)) {
-        const error = new Error('Project not found')
+      if (!project || project.manager.toString() !== req.user.id.toString() && !project.team.includes(req.user.id)) {
+        const error = new Error('project.not_found')
         return res.status(404).json({error: error.message})
       }
       res.json(project)
     } catch (error) {
-      console.log(error)
+      res.status(500).json({ error: 'something_went_wrong' })
     }
   }
 
   static updateProject = async (req: Request, res: Response) => {
     try {       
       req.project.clientName = req.body.clientName
+      req.project.clientUrl = req.body.clientUrl
       req.project.projectName = req.body.projectName
       req.project.description = req.body.description
 
       await req.project.save()
-      res.send('Project Updated!')
+      res.send('project.updated')
     } catch (error) {
-      console.log(error)
+      res.status(500).json({ error: 'something_went_wrong' })
     }
   }
 
   static deleteProject = async (req: Request, res: Response) => {
     try {
       await req.project.deleteOne()
-      res.send('Project Deleted')
+      res.send('project.deleted')
     } catch (error) {
-      console.log(error)
+      res.status(500).json({ error: 'something_went_wrong' })
     }
   }
 }

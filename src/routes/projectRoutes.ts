@@ -15,7 +15,6 @@ router.use(authenticate) // Express middleware to protect all endpoints
 router.post('/',
   body('projectName').notEmpty().withMessage('projectName is required'),
   body('clientName').notEmpty().withMessage('clientName is required'),
-  body('description').notEmpty().withMessage('description is required'),
   handleInputErrors,
   ProjectController.createProject
 )
@@ -35,7 +34,6 @@ router.put('/:projectId',
   param('projectId').isMongoId().withMessage('ID not valid'),
   body('projectName').notEmpty().withMessage('projectName is required'),
   body('clientName').notEmpty().withMessage('clientName is required'),
-  body('description').notEmpty().withMessage('description is required'),
   handleInputErrors,
   hasAuthorization,
   ProjectController.updateProject as any

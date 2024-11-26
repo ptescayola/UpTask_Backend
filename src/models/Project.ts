@@ -5,7 +5,8 @@ import { IUser } from './User'
 export interface IProject extends Document {
   projectName: string
   clientName: string
-  description: string
+  clientUrl: string | null
+  description: string | null
   tasks: PopulatedDoc<ITask & Document>[]
   manager: PopulatedDoc<IUser & Document>
   team: PopulatedDoc<IUser & Document>[]
@@ -22,9 +23,12 @@ const ProjectSchema: Schema = new Schema({
     required: true,
     trim: true
   },
+  clientUrl: {
+    type: String,
+    trim: true
+  },
   description: {
     type: String,
-    required: true,
     trim: true
   },
   tasks: [

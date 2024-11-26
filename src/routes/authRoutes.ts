@@ -7,11 +7,12 @@ import { authenticate } from '../middleware/auth'
 const router = Router()
 
 router.post('/create-account',
-  body('name').notEmpty().withMessage('name required'),
+  body('name').notEmpty().withMessage('Field name required'),
+  body('lastname').notEmpty().withMessage('Field lastname required'),
   body('password').isLength({ min: 8 }).withMessage('Password too short, min 8 characters'),
   body('password_confirmation').custom((value, { req }) => {
     if (value !== req.body.password) {
-      throw new Error('The password does not match')
+      throw new Error('password.not_match')
     }
     return true
   }),
@@ -56,7 +57,7 @@ router.post('/update-password/:token',
   body('password').isLength({ min: 8 }).withMessage('Password too short, min 8 characters'),
   body('password_confirmation').custom((value, { req }) => {
     if (value !== req.body.password) {
-      throw new Error('The password does not match')
+      throw new Error('password.not_match')
     }
     return true
   }),
@@ -73,6 +74,7 @@ router.get('/user',
 router.put('/profile',
   authenticate,
   body('name').notEmpty().withMessage('name required'),
+  body('lastname').notEmpty().withMessage('lastname required'),
   body('email').isEmail().withMessage('Email not valid'),
   handleInputErrors,
   AuthController.updateProfile as any
@@ -84,7 +86,7 @@ router.post('/update-password',
   body('password').isLength({ min: 8 }).withMessage('Password too short, min 8 characters'),
   body('password_confirmation').custom((value, { req }) => {
     if (value !== req.body.password) {
-        throw new Error('The password does not match')
+      throw new Error('password.not_match')
     }
     return true
   }),
