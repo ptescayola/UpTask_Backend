@@ -11,6 +11,7 @@ declare global {
 }
 
 export const authenticate: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+
   const bearer = req.headers.authorization
   if (!bearer) {
     const error = new Error('auth.not_authorized')
@@ -24,8 +25,7 @@ export const authenticate: RequestHandler = async (req: Request, res: Response, 
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     
     if (typeof decoded === 'object' && decoded.id) {
-      const user = await User.findById(decoded.id).select('_id name lastname email')
-      console.log(user)
+      const user = await User.findById(decoded.id).select('_id name lastname email profileImage')
       if (user) {
         req.user = user // to have available what user is doing request (manager)
         next()

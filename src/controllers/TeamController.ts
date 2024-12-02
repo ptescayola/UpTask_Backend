@@ -7,7 +7,7 @@ export class TeamMemberController {
     try {
       const { email } = req.body
 
-      const user = await User.findOne({email}).select('id email name')
+      const user = await User.findOne({email}).select('id email name lastname')
       if (!user) {
         const error = new Error('user.not_found')
         return res.status(404).json({error: error.message})
@@ -22,7 +22,7 @@ export class TeamMemberController {
     try {
       const project = await Project.findById(req.project.id).populate({
         path: 'team',
-        select: 'id email name'
+        select: 'id email name lastname'
       })
       res.json(project.team)
     } catch(error) {

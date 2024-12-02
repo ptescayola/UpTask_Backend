@@ -5,6 +5,7 @@ import { checkPassword, hashPassword } from '../utils/auth'
 import { generateToken } from '../utils/token'
 import { AuthEmail } from '../emails/AuthEmail'
 import { generateJWT } from '../utils/jwt'
+import { deleteProfileImage } from '../utils/multer'
 
 export class AuthController {
 
@@ -200,7 +201,8 @@ export class AuthController {
   }
 
   static user = async (req: Request, res: Response) => {
-    return res.json(req.user)
+    const user = await User.findById(req.user.id).select('_id name lastname email profileImage')
+    return res.json(user)
   }
 
   static updateProfile = async (req: Request, res: Response) => {
@@ -219,6 +221,47 @@ export class AuthController {
     try {
       await req.user.save()
       res.send('user.updated')
+    } catch (error) {
+      res.status(500).json({ error: 'something_went_wrong' })
+    }
+  }
+
+  static updateProfileImage = async (req: Request, res: Response) => {
+    try {
+      if (!req.file) {
+        const error = new Error('No image file provided')
+        return res.status(400).json({ error: error.message })
+      }
+
+      const user = await User.findById(req.user.id)
+      
+      if (user.profileImage) {
+        deleteProfileImage(user.profileImage)
+      }
+
+      user.profileImage = req.file.filename
+      await user.save()
+
+      res.json({
+        message: 'Profile image updated successfully',
+        profileImage: user.profileImage ?? null
+      })
+    } catch (error) {
+      res.status(500).json({ error: 'something_went_wrong' })
+    }
+  }
+
+  static deleteProfileImage = async (req: Request, res: Response) => {
+    try {
+      const user = await User.findById(req.user.id)
+      
+      if (user.profileImage) {
+        deleteProfileImage(user.profileImage)
+        user.profileImage = null
+        await user.save()
+      }
+
+      res.json({ message: 'Profile image deleted successfully' })
     } catch (error) {
       res.status(500).json({ error: 'something_went_wrong' })
     }

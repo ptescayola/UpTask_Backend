@@ -3,6 +3,7 @@ import { body, param } from 'express-validator'
 import { AuthController } from '../controllers/AuthController'
 import { handleInputErrors } from '../middleware/validation'
 import { authenticate } from '../middleware/auth'
+import { uploadConfig } from '../utils/multer'
 
 const router = Router()
 
@@ -78,6 +79,17 @@ router.put('/profile',
   body('email').isEmail().withMessage('Email not valid'),
   handleInputErrors,
   AuthController.updateProfile as any
+)
+
+router.post('/profile-image',
+  authenticate,
+  uploadConfig.single('profileImage'),
+  AuthController.updateProfileImage as any
+)
+
+router.delete('/profile-image',
+  authenticate,
+  AuthController.deleteProfileImage
 )
 
 router.post('/update-password',
